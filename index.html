@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz de Biologia - Grupos Vegetais</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Quiz: Grupos Vegetais</h1>
+    <div id="quiz">
+      <div id="question">Carregando pergunta...</div>
+      <div id="options"></div>
+      <button id="next">Próxima</button>
+    </div>
+    <div id="result" class="hidden"></div>
+  </div>
+
+  <script src="script.js"></script>
+  <style>
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #dff0d8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.container {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  width: 400px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #4caf50;
+}
+
+#question {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+#options button {
+  display: block;
+  margin: 10px 0;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: #e0e0e0;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.2s;
+}
+
+#options button:hover {
+  background-color: #d5d5d5;
+}
+
+#next {
+  margin-top: 20px;
+  padding: 10px;
+  width: 100%;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#next:hover {
+  background-color: #45a049;
+}
+
+.hidden {
+  display: none;
+}
+
+#result {
+  text-align: center;
+  font-size: 20px;
+  color: #333;
+}
+
+  </style>
+
+  <script>
+
+const questions = [
+  {
+    question: "Qual grupo vegetal é representado pelas briófitas?",
+    options: ["Musgos", "Samambaias", "Pinheiros", "Orquídeas"],
+    answer: "Musgos"
+  },
+  {
+    question: "As pteridófitas se reproduzem por:",
+    options: ["Sementes", "Esporas", "Frutos", "Flores"],
+    answer: "Esporas"
+  },
+  {
+    question: "Qual é a principal estrutura reprodutiva das angiospermas?",
+    options: ["Esporas", "Flores", "Raízes", "Folhas"],
+    answer: "Flores"
+  },
+  {
+    question: "Gimnospermas produzem:",
+    options: ["Frutos", "Flores", "Sementes nuas", "Esporas"],
+    answer: "Sementes nuas"
+  },
+  {
+    question: "Briófitas geralmente são encontradas em:",
+    options: ["Locais áridos", "Ambientes aquáticos profundos", "Locais úmidos e sombreados", "Áreas urbanas secas"],
+    answer: "Locais úmidos e sombreados"
+  },
+  {
+    question: "As angiospermas são conhecidas por produzir:",
+    options: ["Sementes nuas", "Esporos", "Flores e frutos", "Somente folhas"],
+    answer: "Flores e frutos"
+  },
+  {
+    question: "As pteridófitas possuem estruturas como:",
+    options: ["Raiz, caule e folha", "Apenas folha", "Flor e fruto", "Somente raiz"],
+    answer: "Raiz, caule e folha"
+  },
+  {
+    question: "Qual é uma curiosidade sobre as briófitas?",
+    options: [
+      "São as únicas que produzem flores",
+      "São as plantas mais altas do planeta",
+      "Não possuem vasos condutores de seiva",
+      "Produzem sementes com casca dura"
+    ],
+    answer: "Não possuem vasos condutores de seiva"
+  },
+  {
+    question: "As gimnospermas incluem plantas como:",
+    options: ["Pinheiros e araucárias", "Musgos e líquens", "Hortelã e tomate", "Samambaias e avencas"],
+    answer: "Pinheiros e araucárias"
+  },
+  {
+    question: "Qual grupo vegetal é o mais evoluído?",
+    options: ["Briófitas", "Pteridófitas", "Gimnospermas", "Angiospermas"],
+    answer: "Angiospermas"
+  }
+];
+
+let currentQuestion = 0;
+let score = 0;
+
+const questionEl = document.getElementById("question");
+const optionsEl = document.getElementById("options");
+const nextBtn = document.getElementById("next");
+const resultEl = document.getElementById("result");
+
+function loadQuestion() {
+  const q = questions[currentQuestion];
+  questionEl.textContent = q.question;
+  optionsEl.innerHTML = "";
+  q.options.forEach(option => {
+    const btn = document.createElement("button");
+    btn.textContent = option;
+    btn.onclick = () => selectAnswer(option);
+    optionsEl.appendChild(btn);
+  });
+}
+
+function selectAnswer(selected) {
+  const correct = questions[currentQuestion].answer;
+  if (selected === correct) {
+    score++;
+  }
+
+  Array.from(optionsEl.children).forEach(btn => {
+    btn.disabled = true;
+    if (btn.textContent === correct) {
+      btn.style.backgroundColor = "#4caf50";
+    } else if (btn.textContent === selected) {
+      btn.style.backgroundColor = "#f44336";
+    }
+  });
+
+  nextBtn.style.display = "block";
+}
+
+nextBtn.onclick = () => {
+  currentQuestion++;
+  if (currentQuestion < questions.length) {
+    loadQuestion();
+    nextBtn.style.display = "none";
+  } else {
+    showResult();
+  }
+};
+
+function showResult() {
+  document.getElementById("quiz").classList.add("hidden");
+  resultEl.classList.remove("hidden");
+  resultEl.innerHTML = `<h2>Você acertou ${score} de ${questions.length} perguntas!</h2>`;
+}
+
+loadQuestion();
+
+  </script>
+</body>
+</html>
